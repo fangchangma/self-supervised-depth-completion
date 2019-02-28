@@ -6,11 +6,11 @@ from torchvision.models import resnet
 
 def init_weights(m):
     if isinstance(m, nn.Conv2d) or isinstance(m, nn.Linear):
-        m.weight.data.normal_(0, 0.02)
+        m.weight.data.normal_(0, 1e-3)
         if m.bias is not None:
             m.bias.data.zero_()
     elif isinstance(m, nn.ConvTranspose2d):
-        m.weight.data.normal_(0, 0.02)
+        m.weight.data.normal_(0, 1e-3)
         if m.bias is not None:
             m.bias.data.zero_()
     elif isinstance(m, nn.BatchNorm2d):
@@ -135,7 +135,7 @@ class DepthCompletionNet(nn.Module):
         y = torch.cat((convt2, conv2), 1)
 
         convt1 = self.convt1(y)
-        y = torch.cat((convt1,conv1),1)
+        y = torch.cat((convt1,conv1), 1)
 
         y = self.convtf(y)
 
@@ -144,4 +144,3 @@ class DepthCompletionNet(nn.Module):
         else:
             min_distance = 0.9
             return F.relu(100 * y - min_distance) + min_distance # the minimum range of Velodyne is around 3 feet ~= 0.9m
-        return y

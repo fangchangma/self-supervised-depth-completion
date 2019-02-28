@@ -6,12 +6,12 @@ This repo contains the PyTorch implementation of our ICRA'19 paper on ["Self-sup
 	<img src="https://j.gifs.com/rRrOW4.gif" alt="photo not available" height="50%">
 </p>
 
-Complete code will be released soon. 
-
 ## Contents
 0. [Notes](#requirements)
 0. [Requirements](#requirements)
 0. [Trained Models](#trained-models)
+0. [Training and Testing](#training-and-testing)
+0. [Questions](#questions)
 0. [Citation](#citation)
 
 ## Notes
@@ -30,8 +30,19 @@ This code was tested with Python 3 and PyTorch 1.0 on Ubuntu 16.04.
 ## Trained Models
 Download our trained models at http://datasets.lids.mit.edu/self-supervised-depth-completion to a folder of your choice.
 - supervised training (i.e., models trained with semi-dense lidar ground truth): http://datasets.lids.mit.edu/self-supervised-depth-completion/supervised/
-- self-supervised (i.e., photometric loss + sparse depth loss + smoothness loss): TODO
-- photometric loss only: TODO
+- self-supervised (i.e., photometric loss + sparse depth loss + smoothness loss): http://datasets.lids.mit.edu/self-supervised-depth-completion/self-supervised/
+
+## Training and testing
+A complete list of training options is available with `python main.py -h`. For instance,
+	```bash
+	python main.py --train-mode dense 			 # train with the KITTI semi-dense annotations
+	python main.py --train-mode sparse+photo 	 # train with the self-supervised framework, not using ground truth
+	python main.py --resume [checkpoint-path]	 # resume previous training
+	python main.py --evaluate [checkpoint-path]  # test the trained model
+	```
+
+## Questions
+Please create a new issue for code-related questions. Pull requests are welcome.
 
 ## Citation
 If you use our code or method in your work, please cite the following:
@@ -49,4 +60,3 @@ If you use our code or method in your work, please cite the following:
 		year={2018}
 	}
 
-Please create a new issue for code-related questions. Pull requests are welcome.
