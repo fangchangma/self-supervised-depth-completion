@@ -25,7 +25,20 @@ This code was tested with Python 3 and PyTorch 1.0 on Ubuntu 16.04.
 pip3 uninstall opencv-contrib-python
 pip3 install opencv-contrib-python==3.4.2.16
 ```
-- Download the [KITTI Depth](http://www.cvlibs.net/datasets/kitti/eval_depth.php?benchmark=depth_completion) Dataset and the corresponding RGB images (script will be released).
+- Download the [KITTI Depth](http://www.cvlibs.net/datasets/kitti/eval_depth.php?benchmark=depth_completion) Dataset and the corresponding RGB images (script will be released). 
+- The code, data and result directory structure is shown as follows
+```
+.
+├── self-supervised-depth-completion
+├── data
+|   ├── kitti_depth
+|   |   ├── train
+|   |   ├── val_selection_cropped
+|   └── kitti_rgb
+|   |   ├── train
+|   |   ├── val_selection_cropped
+├── results
+```
 
 ## Trained Models
 Download our trained models at http://datasets.lids.mit.edu/self-supervised-depth-completion to a folder of your choice.
