@@ -21,10 +21,10 @@ Our network is trained with the KITTI dataset alone, without pretraining on City
 This code was tested with Python 3 and PyTorch 1.0 on Ubuntu 16.04.
 - Install [PyTorch](https://pytorch.org/get-started/locally/) on a machine with CUDA GPU.
 - The code for self-supervised training requires [OpenCV](http://pytorch.org/) along with the contrib modules. For instance,
-	```bash
-	pip3 uninstall opencv-contrib-python
-	pip3 install opencv-contrib-python==3.4.2.16
-	```
+```bash
+pip3 uninstall opencv-contrib-python
+pip3 install opencv-contrib-python==3.4.2.16
+```
 - Download the [KITTI Depth](http://www.cvlibs.net/datasets/kitti/eval_depth.php?benchmark=depth_completion) Dataset and the corresponding RGB images (script will be released).
 
 ## Trained Models
@@ -33,13 +33,17 @@ Download our trained models at http://datasets.lids.mit.edu/self-supervised-dept
 - self-supervised (i.e., photometric loss + sparse depth loss + smoothness loss): http://datasets.lids.mit.edu/self-supervised-depth-completion/self-supervised/
 
 ## Training and testing
-A complete list of training options is available with `python main.py -h`. For instance,
-	```bash
-	python main.py --train-mode dense 			 # train with the KITTI semi-dense annotations
-	python main.py --train-mode sparse+photo 	 # train with the self-supervised framework, not using ground truth
-	python main.py --resume [checkpoint-path]	 # resume previous training
-	python main.py --evaluate [checkpoint-path]  # test the trained model
-	```
+A complete list of training options is available with 
+```bash
+python main.py -h
+```
+For instance,
+```bash
+python main.py --train-mode dense # train with the KITTI semi-dense annotations
+python main.py --train-mode sparse+photo # train with the self-supervised framework, not using ground truth
+python main.py --resume [checkpoint-path] # resume previous training
+python main.py --evaluate [checkpoint-path] # test the trained model
+```
 
 ## Questions
 Please create a new issue for code-related questions. Pull requests are welcome.
