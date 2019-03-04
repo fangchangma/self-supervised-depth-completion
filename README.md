@@ -52,7 +52,7 @@ python main.py -h
 ```
 For instance,
 ```bash
-python main.py --train-mode dense # train with the KITTI semi-dense annotations
+python main.py --train-mode dense -b 1 # train with the KITTI semi-dense annotations and batch size 1
 python main.py --train-mode sparse+photo # train with the self-supervised framework, not using ground truth
 python main.py --resume [checkpoint-path] # resume previous training
 python main.py --evaluate [checkpoint-path] # test the trained model

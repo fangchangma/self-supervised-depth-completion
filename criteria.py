@@ -50,7 +50,7 @@ class PhotometricLoss(nn.Module):
             if diff.nelement() > 0:
                 self.loss = diff.mean()
             else:
-                print("warning: diff.nelement()==0 in PhotometricLoss")
+                print("warning: diff.nelement()==0 in PhotometricLoss (this is expected during early stage of training, try larger batch size).")
                 self.loss = 0
         else:
             print("warning: 0 valid pixel in PhotometricLoss")
