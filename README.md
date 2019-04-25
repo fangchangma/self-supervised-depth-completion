@@ -25,7 +25,7 @@ This code was tested with Python 3 and PyTorch 1.0 on Ubuntu 16.04.
 pip3 uninstall opencv-contrib-python
 pip3 install opencv-contrib-python==3.4.2.16
 ```
-- Download the [KITTI Depth](http://www.cvlibs.net/datasets/kitti/eval_depth.php?benchmark=depth_completion) Dataset and the corresponding RGB images (script will be released). 
+- Download the [KITTI Depth](http://www.cvlibs.net/datasets/kitti/eval_depth.php?benchmark=depth_completion) Dataset and the corresponding RGB images. Please refer to scripts under `download`.
 - The code, data and result directory structure is shown as follows
 ```
 .
@@ -33,10 +33,21 @@ pip3 install opencv-contrib-python==3.4.2.16
 ├── data
 |   ├── kitti_depth
 |   |   ├── train
+|   |   ├── val
 |   |   ├── val_selection_cropped
+|   |   ├── ...
 |   └── kitti_rgb
 |   |   ├── train
+|   |   |   ├── 2011_09_26_drive_0001_sync
+|   |   |   |   ├── image_02
+|   |   |   |   |   ├── data
+|   |   |   |   |   |   ├── 0000000000.png
+|   |   |   |   |   |   ├── ...
+|   |   |   |   ├── image_03
+|   |   ├── val
 |   |   ├── val_selection_cropped
+|   |   |   ├── 2011_09_26_drive_0002_sync_0000000005_image_02.png
+|   |   |   ├── ...
 ├── results
 ```
 
