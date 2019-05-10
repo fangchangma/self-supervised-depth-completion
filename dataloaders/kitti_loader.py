@@ -12,7 +12,7 @@ import cv2
 from dataloaders import transforms
 from dataloaders.pose_estimator import get_pose_pnp
 
-input_options = ['d', 'rgb', 'rgbd', 'g', 'gd']
+input_options = ['d', 'rgb', 'rgbd', 'y', 'yd']
 
 def load_calib():
     """
@@ -35,7 +35,7 @@ def load_calib():
 root_d = os.path.join('..', 'data', 'kitti_depth')
 root_rgb = os.path.join('..', 'data', 'kitti_rgb')
 def get_paths_and_transform(split, args):
-    assert (args.use_d or args.use_rgb or args.use_g), 'no proper input selected'
+    assert (args.use_d or args.use_rgb or args.use_y), 'no proper input selected'
 
     if split == "train":
         transform = train_transform
@@ -94,7 +94,7 @@ def get_paths_and_transform(split, args):
         raise(RuntimeError("Requested sparse depth but none was found"))
     if len(paths_rgb) == 0 and args.use_rgb:
         raise(RuntimeError("Requested rgb images but none was found"))
-    if len(paths_rgb) == 0 and args.use_g:
+    if len(paths_rgb) == 0 and args.use_y:
         raise(RuntimeError("Requested gray images but no rgb was found"))
     if len(paths_rgb) != len(paths_d) or len(paths_rgb) != len(paths_gt):
         raise(RuntimeError("Produced different sizes for datasets"))
@@ -186,7 +186,7 @@ to_float_tensor = lambda x: to_tensor(x).float()
 def handle_gray(rgb, args):
     if rgb is None:
         return None, None
-    if not args.use_g:
+    if not args.use_y:
         return rgb, None
     else:
         img = np.array(Image.fromarray(rgb).convert('L'))
@@ -238,7 +238,7 @@ class KittiDepth(data.Dataset):
 
     def __getraw__(self, index):
         rgb = rgb_read(self.paths['rgb'][index]) if \
-            (self.paths['rgb'][index] is not None and (self.args.use_rgb or self.args.use_g)) else None
+            (self.paths['rgb'][index] is not None and (self.args.use_rgb or self.args.use_y)) else None
         sparse = depth_read(self.paths['d'][index]) if \
             (self.paths['d'][index] is not None and self.args.use_d) else None
         target = depth_read(self.paths['gt'][index]) if \
@@ -265,7 +265,7 @@ class KittiDepth(data.Dataset):
 
         rgb, gray = handle_gray(rgb, self.args)
         candidates = {"rgb":rgb, "d":sparse, "gt":target, \
-            "g":gray, "r_mat":r_mat, "t_vec":t_vec, "rgb_near":rgb_near}
+            "y":gray, "r_mat":r_mat, "t_vec":t_vec, "rgb_near":rgb_near}
         items = {key:to_float_tensor(val) for key, val in candidates.items() if val is not None}
 
         return items

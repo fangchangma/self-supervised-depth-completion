@@ -36,7 +36,7 @@ parser.add_argument('--print-freq', '-p', default=10, type=int,
                     metavar='N', help='print frequency (default: 10)')
 parser.add_argument('--resume', default='', type=str, metavar='PATH',
                     help='path to latest checkpoint (default: none)')
-parser.add_argument('-i','--input', type=str, default='gd',
+parser.add_argument('-i','--input', type=str, default='yd',
                     choices=input_options, help='input: | '.join(input_options))
 parser.add_argument('-l','--layers', type=int, default=34,
                     help='use 16 for sparse_conv; use 18 or 34 for resnet')
@@ -60,7 +60,7 @@ args.use_pose = ("photo" in args.train_mode)
 args.result = os.path.join('..', 'results')
 args.use_rgb = ('rgb' in args.input) or args.use_pose
 args.use_d = 'd' in args.input
-args.use_g = 'g' in args.input
+args.use_y = 'y' in args.input
 if args.use_pose:
     args.w1, args.w2 = 0.1, 0.1
 else:

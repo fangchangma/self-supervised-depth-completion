@@ -65,7 +65,7 @@ class DepthCompletionNet(nn.Module):
         if 'rgb' in self.modality:
             channels = 64 * 3 // len(self.modality)
             self.conv1_img = conv_bn_relu(3, channels, kernel_size=3, stride=1, padding=1)
-        elif 'g' in self.modality:
+        elif 'y' in self.modality:
             channels = 64 // len(self.modality)
             self.conv1_img = conv_bn_relu(1, channels, kernel_size=3, stride=1, padding=1)
 
@@ -107,10 +107,10 @@ class DepthCompletionNet(nn.Module):
             conv1_d = self.conv1_d(x['d'])
         if 'rgb' in self.modality:
             conv1_img = self.conv1_img(x['rgb'])
-        elif 'g' in self.modality:
-            conv1_img = self.conv1_img(x['g'])
+        elif 'y' in self.modality:
+            conv1_img = self.conv1_img(x['y'])
 
-        if self.modality=='rgbd' or self.modality=='gd':
+        if self.modality=='rgbd' or self.modality=='yd':
             conv1 = torch.cat((conv1_d, conv1_img),1)
         else:
             conv1 = conv1_d if (self.modality=='d') else conv1_img

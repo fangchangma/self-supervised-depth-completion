@@ -24,10 +24,10 @@ def merge_into_row(ele, pred):
         rgb = np.squeeze(ele['rgb'][0,...].data.cpu().numpy())
         rgb = np.transpose(rgb, (1, 2, 0))
         img_list.append(rgb)
-    elif 'g' in ele:
-        g = np.squeeze(ele['g'][0,...].data.cpu().numpy())
-        g = np.array(Image.fromarray(g).convert('RGB'))
-        img_list.append(g)
+    elif 'y' in ele:
+        y = np.squeeze(ele['y'][0,...].data.cpu().numpy())
+        y = np.array(Image.fromarray(y).convert('RGB'))
+        img_list.append(y)
     if 'd' in ele:
         img_list.append(preprocess_depth(ele['d'][0,...]))
     img_list.append(preprocess_depth(pred[0,...]))
