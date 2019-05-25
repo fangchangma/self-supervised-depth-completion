@@ -78,7 +78,6 @@ def get_paths_and_transform(split, args):
     if glob_gt is not None:
         glob_gt = os.path.join(root_d,glob_gt)
         paths_gt = sorted(glob.glob(glob_gt))
-        #print(paths_gt)
         paths_d = [p.replace(pattern_d[0],pattern_d[1]) for p in paths_gt]
         paths_rgb = [get_rgb_paths(p) for p in paths_gt]
     else: # test and only has d or rgb
@@ -231,7 +230,6 @@ class KittiDepth(data.Dataset):
     def __init__(self, split, args):
         self.args = args
         self.split = split
-        print(split)
         paths, transform = get_paths_and_transform(split, args)
         self.paths = paths
         self.transform = transform
