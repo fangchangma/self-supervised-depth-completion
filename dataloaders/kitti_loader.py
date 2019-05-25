@@ -17,29 +17,14 @@ input_options = ['d', 'rgb', 'rgbd', 'g', 'gd']
 def load_calib():
     """
     Temporarily hardcoding the calibration matrix using calib file from 2011_09_26
-    Args:
-        filename : root directory
-    Returns:
-        K:
     """
-    # reading projection matrix
-    # P_rect02 is in line 25
-    # P_rect03 is in line 33
     calib = open("dataloaders/calib_cam_to_cam.txt", "r")
     lines = calib.readlines()
     P_rect_line = lines[25]
-    # if 'image_02' in filename:
-    #     P_rect_line = lines[25]
-    # elif 'image_03' in filename:
-    #     P_rect_line = lines[33]
-    # else:
-    #     assert False, "unrecognized filename for calibration loading: {}".format(filename)
 
     Proj_str = P_rect_line.split(":")[1].split(" ")[1:]
     Proj = np.reshape(np.array([float(p) for p in Proj_str]),(3,4)).astype(np.float32)
-
-    # camera matrix
-    K = Proj[:3,:3]
+    K = Proj[:3,:3] # camera matrix
 
     # note: we will take the center crop of the images during augmentation
     # that changes the optical centers, but not focal lengths

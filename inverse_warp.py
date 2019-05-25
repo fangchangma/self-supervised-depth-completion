@@ -1,5 +1,5 @@
 import torch
-from torch.autograd import Variable
+import torch.nn.functional as F
 
 class Intrinsics:
     def __init__(self, width, height, fu, fv, cu=0, cv=0):
@@ -53,7 +53,6 @@ def image_to_pointcloud(depth, intrinsics):
     return torch.cat((X, Y, depth), dim=1)
 
 def pointcloud_to_image(pointcloud, intrinsics):
-    assert isinstance(pointcloud, Variable)
     assert pointcloud.dim() == 4
 
     batch_size = pointcloud.size(0)
@@ -69,8 +68,9 @@ def pointcloud_to_image(pointcloud, intrinsics):
     U_proj_normalized = (2 * U_proj / (intrinsics.width-1) - 1).view(batch_size, -1)
     V_proj_normalized = (2 * V_proj / (intrinsics.height-1) - 1).view(batch_size, -1)
 
-    # This is important because PyTorch doesn't do as it claims for points out of boundary
+    # This was important since PyTorch didn't do as it claimed for points out of boundary
     # See https://github.com/ClementPinard/SfmLearner-Pytorch/blob/master/inverse_warp.py
+    # Might not be necessary any more
     U_proj_mask = ((U_proj_normalized>1) + (U_proj_normalized<-1)).detach()
     U_proj_normalized[U_proj_mask] = 2
     V_proj_mask = ((V_proj_normalized>1) + (V_proj_normalized<-1)).detach()
@@ -102,15 +102,18 @@ def transform_curr_to_near(pointcloud_curr, r_mat, t_vec, intrinsics):
     return pointcloud_near
 
 def homography_from(rgb_near, depth_curr, r_mat, t_vec, intrinsics):
-    # homography of img image from previous pose to the current pose
+    # inverse warp the RGB image from the nearby frame to the current frame
 
     # to ensure dimension consistency
     r_mat = r_mat.view(-1, 3, 3)
     t_vec = t_vec.view(-1, 3)
 
+    # compute source pixel coordinate
     pointcloud_curr = image_to_pointcloud(depth_curr, intrinsics)
     pointcloud_near = transform_curr_to_near(pointcloud_curr, r_mat, t_vec, intrinsics)
     pixel_coords_near = pointcloud_to_image(pointcloud_near, intrinsics)
-    warped = torch.nn.functional.grid_sample(rgb_near, pixel_coords_near)
+
+    # the warping
+    warped = F.grid_sample(rgb_near, pixel_coords_near)
 
     return warped

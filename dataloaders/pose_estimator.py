@@ -1,11 +1,5 @@
 import cv2
 import numpy as np
-from matplotlib import pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
-# from sklearn import linear_model, datasets
-# from sklearn.neighbors import NearestNeighbors
-# from scipy.optimize import minimize,minimize_scalar
-# import pose_estimation.build.libpclicp as pclicp
 
 def rgb2gray(rgb):
     return np.dot(rgb[...,:3], [0.299, 0.587, 0.114])
@@ -27,10 +21,6 @@ def feature_match(img1, img2):
    use_flann = False # better not use flann
 
    detector = cv2.xfeatures2d.SIFT_create(max_n_features)
-   # other detectors to try out
-   #detector = cv2.xfeatures2d.SURF_create(max_n_features)
-   #detector = cv2.FastFeatureDetector_create(max_n_features)
-   #detector = cv2.ORB_create(max_n_features,WTA_K = 4)
 
    # find the keypoints and descriptors with SIFT
    kp1, des1 = detector.detectAndCompute(img1, None)
@@ -39,8 +29,6 @@ def feature_match(img1, img2):
       return [], []
    des1 = des1.astype(np.float32)
    des2 = des2.astype(np.float32)
-   # print("des1.shape", des1.shape)
-   # print("des2.shape", des2.shape)
 
    if use_flann:
       # FLANN parameters
@@ -71,22 +59,12 @@ def get_pose_pnp(rgb_curr, rgb_near, depth_curr, K):
    gray_curr = rgb2gray(rgb_curr).astype(np.uint8)
    gray_near = rgb2gray(rgb_near).astype(np.uint8)
    height, width = gray_curr.shape
-   height_, width_ = height//2, width//2
-
-   # shrink the image size for speed
-   if False:
-      new_size = (height_, width_)
-      cv2.resize(gray_curr, new_size, interpolation=cv2.INTER_LINEAR);
-      cv2.resize(gray_near, new_size, interpolation=cv2.INTER_LINEAR);
-      cv2.resize(depth_curr, new_size, interpolation=cv2.INTER_NEAREST);
-      K = K / 2
 
    pts2d_curr, pts2d_near = feature_match(gray_curr, gray_near) # feature matching
 
    # dilation of depth
    kernel = np.ones((4,4), np.uint8)
    depth_curr_dilated = cv2.dilate(depth_curr, kernel)
-   # depth_curr_dilated = depth_curr
 
    # extract 3d pts
    pts3d_curr = []
@@ -105,9 +83,7 @@ def get_pose_pnp(rgb_curr, rgb_near, depth_curr, K):
       pts3d_curr = np.expand_dims(np.array(pts3d_curr).astype(np.float32), axis=1)
       pts2d_near_filtered = np.expand_dims(np.array(pts2d_near_filtered).astype(np.float32), axis=1)
 
-      # print(pts3d_curr.shape, pts2d_near_filtered.shape)
-
-      # rvec, tvec, inliers = cv2.solvePnPRansac(pts3d_curr, pts2d_near_filtered, K, dist_coeffs)
+      # ransac
       ret = cv2.solvePnPRansac(pts3d_curr, pts2d_near_filtered, K, distCoeffs=None)
       success = ret[0]
       rotation_vector = ret[1]
