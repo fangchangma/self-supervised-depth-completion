@@ -32,9 +32,9 @@ def load_calib():
     K[1,2] = K[1,2] - 11.5 # from width = 375 to 352, with a 11.5-pixel cut on both sides
     return K
 
-root_d = os.path.join('..', 'data', 'kitti_depth')
-root_rgb = os.path.join('..', 'data', 'kitti_rgb')
 def get_paths_and_transform(split, args):
+    root_d = os.path.join(args.data_folder, 'kitti_depth')
+    root_rgb = os.path.join(args.data_folder, 'kitti_rgb')
     assert (args.use_d or args.use_rgb or args.use_g), 'no proper input selected'
 
     if split == "train":
@@ -42,24 +42,24 @@ def get_paths_and_transform(split, args):
         glob_gt = "train/*_sync/proj_depth/groundtruth/image_0[2,3]/*.png"
         pattern_d = ("groundtruth","velodyne_raw")
         def get_rgb_paths(p):
-          ps = p.split('/')
-          pnew = '/'.join([root_rgb]+ps[-6:-4]+ps[-2:-1]+['data']+ps[-1:])
-          return pnew
+            ps = p.split('/')
+            pnew = '/'.join([root_rgb]+ps[-6:-4]+ps[-2:-1]+['data']+ps[-1:])
+            return pnew
     elif split == "val":
         if args.val == "full":
             transform = val_transform
             glob_gt = "val/*_sync/proj_depth/groundtruth/image_0[2,3]/*.png"
             pattern_d = ("groundtruth","velodyne_raw")
             def get_rgb_paths(p):
-              ps = p.split('/')
-              pnew = '/'.join([root_rgb]+ps[-6:-4]+ps[-2:-1]+['data']+ps[-1:])
-              return pnew
+                ps = p.split('/')
+                pnew = '/'.join([root_rgb]+ps[-6:-4]+ps[-2:-1]+['data']+ps[-1:])
+                return pnew
         elif args.val == "select":
             transform = no_transform
             glob_gt = "val_selection_cropped/groundtruth_depth/*.png"
             pattern_d = ("groundtruth_depth","velodyne_raw")
             def get_rgb_paths(p):
-              return p.replace("groundtruth_depth","image")
+                return p.replace("groundtruth_depth","image")
     elif split == "test_completion":
         transform = no_transform
         glob_gt  = None #"test_depth_completion_anonymous/"
@@ -78,6 +78,7 @@ def get_paths_and_transform(split, args):
     if glob_gt is not None:
         glob_gt = os.path.join(root_d,glob_gt)
         paths_gt = sorted(glob.glob(glob_gt))
+        #print(paths_gt)
         paths_d = [p.replace(pattern_d[0],pattern_d[1]) for p in paths_gt]
         paths_rgb = [get_rgb_paths(p) for p in paths_gt]
     else: # test and only has d or rgb
@@ -230,6 +231,7 @@ class KittiDepth(data.Dataset):
     def __init__(self, split, args):
         self.args = args
         self.split = split
+        print(split)
         paths, transform = get_paths_and_transform(split, args)
         self.paths = paths
         self.transform = transform
