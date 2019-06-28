@@ -35,7 +35,10 @@ pip3 install opencv-contrib-python==3.4.2.16
 |   |   ├── train
 |   |   ├── val
 |   |   ├── val_selection_cropped
-|   |   ├── ...
+|   |   |   ├── groundtruth_depth
+|   |   |   ├── image
+|   |   |   ├── intrinsics
+|   |   |   ├── velodyne_raw
 |   └── kitti_rgb
 |   |   ├── train
 |   |   |   ├── 2011_09_26_drive_0001_sync
@@ -45,9 +48,6 @@ pip3 install opencv-contrib-python==3.4.2.16
 |   |   |   |   |   |   ├── ...
 |   |   |   |   ├── image_03
 |   |   ├── val
-|   |   ├── val_selection_cropped
-|   |   |   ├── 2011_09_26_drive_0002_sync_0000000005_image_02.png
-|   |   |   ├── ...
 ├── results
 ```
 

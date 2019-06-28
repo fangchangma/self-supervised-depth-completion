@@ -36,6 +36,8 @@ parser.add_argument('--print-freq', '-p', default=10, type=int,
                     metavar='N', help='print frequency (default: 10)')
 parser.add_argument('--resume', default='', type=str, metavar='PATH',
                     help='path to latest checkpoint (default: none)')
+parser.add_argument('--data-folder', default='../data', type=str, metavar='PATH',
+                    help='data folder (default: none)')
 parser.add_argument('-i','--input', type=str, default='gd',
                     choices=input_options, help='input: | '.join(input_options))
 parser.add_argument('-l','--layers', type=int, default=34,
@@ -215,9 +217,11 @@ def main():
         train_loader = torch.utils.data.DataLoader(
             train_dataset, batch_size=args.batch_size, shuffle=True,
             num_workers=args.workers, pin_memory=True, sampler=None)
+        print("=> train_loader:{}".format(len(train_loader)))
     val_dataset = KittiDepth('val', args)
     val_loader = torch.utils.data.DataLoader(val_dataset,
         batch_size=1, shuffle=False, num_workers=2, pin_memory=True) # set batch size to be 1 for validation
+    print("=> val_loader:{}".format(len(val_loader)))
     print("=> data loaders created.")
 
     # create backups and results folder
