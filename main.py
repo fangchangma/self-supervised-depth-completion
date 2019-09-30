@@ -178,20 +178,24 @@ def main():
     checkpoint = None
     is_eval = False
     if args.evaluate:
+        data_folder = args.data_folder
         if os.path.isfile(args.evaluate):
             print("=> loading checkpoint '{}'".format(args.evaluate))
             checkpoint = torch.load(args.evaluate)
             args = checkpoint['args']
+            args.data_folder = data_folder
             is_eval = True
             print("=> checkpoint loaded.")
         else:
             print("=> no model found at '{}'".format(args.evaluate))
             return
     elif args.resume: # optionally resume from a checkpoint
+        data_folder = args.data_folder
         if os.path.isfile(args.resume):
             print("=> loading checkpoint '{}'".format(args.resume))
             checkpoint = torch.load(args.resume)
             args.start_epoch = checkpoint['epoch']+1
+            args.data_folder = data_folder
             print("=> loaded checkpoint (epoch {})".format(checkpoint['epoch']))
         else:
             print("=> no checkpoint found at '{}'".format(args.resume))
