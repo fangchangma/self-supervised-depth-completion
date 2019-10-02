@@ -164,20 +164,23 @@ files=(
 2011_10_03_drive_0058
 )
 
+basedir='../data/data_rgb/val/'
+mkdir -p $basedir
+echo "Saving to "$basedir
 for i in ${files[@]}; do
   datadate="${i%%_drive_*}"
   echo $datadate
   shortname=$i'_sync.zip'
   fullname=$i'/'$i'_sync.zip'
+  rm -f $shortname # remove zip file
   echo "Downloading: "$shortname
 
   wget 's3.eu-central-1.amazonaws.com/avg-kitti/raw_data/'$fullname
   unzip -o $shortname
-  mv $datadate'/'$i'_sync' $i'_sync'
+  mv $datadate'/'$i'_sync' $basedir$i'_sync'
   rmdir $datadate
-  rm -rf $i'_sync/image_00' $i'_sync/image_01' $i'_sync/velodyne_points'
+  rm -rf $basedir$i'_sync/image_00' $basedir$i'_sync/image_01' $basedir$i'_sync/velodyne_points' $basedir$i'_sync/oxts'
   rm $shortname # remove zip file
-
 done
 
 
