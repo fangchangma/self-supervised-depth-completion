@@ -269,7 +269,8 @@ def get_rgb_near(path, args):
         if os.path.exists(path_near):
             break
         assert count < 20, "cannot find a nearby frame in 20 trials for {}".format(
-            path_rgb_tgt)
+            path)
+        count += 1
 
     return rgb_read(path_near)
 
